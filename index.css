@@ -1,0 +1,23 @@
+container {
+    display: grid;
+    grid-template-columns: 100px 100px 100px;
+    grid-template-rows: 100px 100px 100px;
+}
+
+div {
+    border: 1px solid black;
+    display: flex;
+}
+
+
+.x {
+    font-size: 80px;
+    align-items: center;
+    justify-content: center;
+}
+
+.o {
+    font-size: 80px;
+    align-items: center;
+    justify-content: center;
+}
