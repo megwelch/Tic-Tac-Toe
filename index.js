@@ -1,21 +1,159 @@
-let squares = Array.from(document.getElementsByClassName('square'))
-let emptySpaces = ['', '', '', '', '', '', '', '', '']
-let currentPlayer = 'X'
+const gridSquares = document.querySelectorAll('.square')
+const gridArray = Array.from(gridSquares)
+const restartBtn = document.querySelector('#restart-btn')
+const winCombos = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6]
+]
+let tracker = [0, 1, 2, 3, 4, 5, 6, 7, 8]
+const human = 'X'
+const computer = 'O'
+
 
 const startGame = () => {
-    squares.forEach(square => square.addEventListener('click', squareClicked, {once:true}))
+    gridSquares.forEach(square => square.addEventListener('click', squareClicked, {once:true}))
 }
 
-const squareClicked = (e) => {
-   const id = e.target.id
-   if (!emptySpaces[id]){
-    emptySpaces[id] = currentPlayer
-    e.target.innerHTML = currentPlayer
-    e.target.classList.add('x')
-   }
+function squareClicked (square) {
+    playerTurn(square.target.id)
 }
+
+function playerTurn (squareId, computerTurn){
+    if(squareClicked){
+        document.getElementById(squareId).innerText = human
+        tracker.splice(squareId, 1)
+        computerTurn
+    } 
+
+    function computerTurn (){
+        const randomIndex = Math.floor(Math.random() * tracker.length)
+        let computerChoice = tracker[randomIndex]
+        document.getElementById(computerChoice).innerText = computer
+        tracker.splice(randomIndex, 1)
+    }
+}
+
+
+
+
+function check(spot1, spot2, spot3){
+    if (spot1.getElementByClass('square').interHTML = 
+    ){
+        return true
+    } else {
+        return false
+    }
+}
+
+
+
+
 
 startGame()
+
+// -----------------------------------------------------------------
+
+
+// const gridSquares = document.querySelectorAll('.square')
+// const gridArray = Array.from(gridSquares)
+// const restartBtn = document.querySelector('#restart-btn')
+// const winCombos = [
+//     [0, 1, 2],
+//     [3, 4, 5],
+//     [6, 7, 8],
+//     [0, 3, 6],
+//     [1, 4, 7],
+//     [2, 5, 8],
+//     [0, 4, 8],
+//     [2, 4, 6]
+// ]
+// const tracker = [0, 1, 2, 3, 4, 5, 6, 7, 8]
+
+
+// const human = 'X'
+// const computer = 'O'
+
+
+// const startGame = () => {
+//     gridSquares.forEach(square => square.addEventListener('click', squareClicked, {once:true}))
+// }
+
+// function squareClicked (square) {
+//     playerTurn(square.target.id, human)
+// }
+
+// function playerTurn (squareId){
+//     document.getElementById(squareId).innerText = human
+//     tracker.splice(squareId, 1)
+//     computerTurn()
+// }
+
+// function computerTurn (){
+//     if (squareClicked){
+//         const randomIndex = Math.floor(Math.random() * tracker.length)
+//         let computerChoice = tracker[randomIndex]
+//         document.getElementById(computerChoice).innerText = computer
+//         tracker.splice(randomIndex, 1);
+//     }
+// }
+
+
+// function check(spot1, spot2, spot3){
+//     if (
+//         spot1
+//     ){
+//         return true
+//     } else {
+//         return false
+//     }
+// }
+
+
+
+
+
+// startGame()
+
+// -------------------------------------------------------------
+
+
+// const squareClicked = (e) => {
+//     const index = gridArray.indexOf(e.target)
+//     gridArray[index].innerHTML = human
+
+//     const spliceNum = tracker.indexOf(index)
+//     tracker.splice(spliceNum, 1)
+
+//     turn (e.target.id, human)
+// }
+
+// function turn (index, player)
+
+
+
+    
+
+
+
+
+
+
+
+// function turn (squareId, player){
+//     tracker[squareId] = player
+//     document.getElementById(squareId).innerText = player
+// }
+
+// function changePlayer () {
+
+// }
+
 
 
 
@@ -55,10 +193,7 @@ startGame()
 
 // // }
 
-// // let computerMove = () => {
-// //     const randomIndex = Math.floor(Math.random() * choices.length)
-// //     let computerChoice = choices[randomIndex]
-// // }
+
 
 
 // // const div = document.querySelector(".square")
@@ -71,4 +206,3 @@ startGame()
 // }
 
 // div.addEventListener("click", makeX);
-
