@@ -1,6 +1,8 @@
-const gridSquares = document.querySelectorAll('.square')
+let gridSquares = document.querySelectorAll('.square')
+console.log(gridSquares)
 const gridArray = Array.from(gridSquares)
 const restartBtn = document.querySelector('#restart-btn')
+const messageText = document.querySelector('#message-text')
 const winCombos = [
     [0, 1, 2],
     [3, 4, 5],
@@ -11,102 +13,120 @@ const winCombos = [
     [0, 4, 8],
     [2, 4, 6]
 ]
-let tracker = ['', '', '', '', '', '', '', '', '']
-const human= 'X'
-let humanArr = ['', '', '', '', '', '', '', '', '']
-const computer= 'O'
-let compArr = ['', '', '', '', '', '', '', '', '']
-
+let playedBoard = ['', '', '', '', '', '', '', '', '']
+let isPlayerOne = true
+let isGameOver = false
+let moveCount = 0
 
 const startGame = () => {
-    gridSquares.forEach(square => square.addEventListener('click', squareClicked, {once:true}))
+    gridSquares.forEach(square => square.addEventListener('click', playSpot, {once:true}))
 }
 
-function squareClicked (square) {
-    playerTurn(square.target.id)
-}
+const checkWin = () => {
+    const winX1 =
+		playedBoard[0] === 'X' &&
+		playedBoard[1] === 'X' &&
+		playedBoard[2] === 'X'
+	const winX2 =
+		playedBoard[0] === 'X' &&
+		playedBoard[3] === 'X' &&
+		playedBoard[6] === 'X'
+	const winX3 =
+		playedBoard[0] === 'X' &&
+		playedBoard[4] === 'X' &&
+		playedBoard[8] === 'X'
+	const winX4 =
+		playedBoard[1] === 'X' &&
+		playedBoard[4] === 'X' &&
+		playedBoard[7] === 'X'
+	const winX5 =
+		playedBoard[2] === 'X' &&
+		playedBoard[5] === 'X' &&
+		playedBoard[8] === 'X'
+	const winX6 =
+		playedBoard[2] === 'X' &&
+		playedBoard[4] === 'X' &&
+		playedBoard[6] === 'X'
+	const winX7 =
+		playedBoard[3] === 'X' &&
+		playedBoard[4] === 'X' &&
+		playedBoard[5] === 'X'
+	const winX8 =
+		playedBoard[6] === 'X' &&
+		playedBoard[7] === 'X' &&
+		playedBoard[8] === 'X'
+	const winO1 =
+		playedBoard[0] === 'O' &&
+		playedBoard[1] === 'O' &&
+		playedBoard[2] === 'O'
+	const winO2 =
+		playedBoard[0] === 'O' &&
+		playedBoard[3] === 'O' &&
+		playedBoard[6] === 'O'
+	const winO3 =
+		playedBoard[0] === 'O' &&
+		playedBoard[4] === 'O' &&
+		playedBoard[8] === 'O'
+	const winO4 =
+		playedBoard[1] === 'O' &&
+		playedBoard[4] === 'O' &&
+		playedBoard[7] === 'O'
+	const winO5 =
+		playedBoard[2] === 'O' &&
+		playedBoard[5] === 'O' &&
+		playedBoard[8] === 'O'
+	const winO6 =
+		playedBoard[2] === 'O' &&
+		playedBoard[4] === 'O' &&
+		playedBoard[6] === 'O'
+	const winO7 =
+		playedBoard[3] === 'O' &&
+		playedBoard[4] === 'O' &&
+		playedBoard[5] === 'O'
+	const winO8 =
+		playedBoard[6] === 'O' &&
+		playedBoard[7] === 'O' &&
+		playedBoard[8] === 'O'
 
-function playerTurn (squareId) {
-    document.getElementById(squareId).innerText = human
-    tracker.splice(squareId, 1, squareId)
-    humanArr.splice(squareId, 1, squareId)
-
-    computerTurn()
-    function computerTurn (){
-        let randomIndex = Math.floor(Math.random() * tracker.length)
-        if (!tracker[randomIndex]){
-            document.getElementById(randomIndex).innerText = computer
-            tracker.splice(randomIndex, 1, randomIndex);
-            compArr.splice(randomIndex, 1, randomIndex)
-            document.getElementById(randomIndex).classList.add('disable-click')
-        } else {
-            computerTurn()
+        ++moveCount
+        console.log(moveCount)
+        if(moveCount === 9){
+            messageText.innerText = `It's a tie!`
+            return true
         }
-    }
+
+        if(winX1 || winX2 || winX3 || winX4 || winX5 || winX6 || winX6 || winX7 || winX8){
+            messageText.innerText = 'Player X Wins!'
+            return true
+        } else if (winO1 || winO2 || winO3 || winO4 || winO5 || winO6 || winO6 || winO7 || winO8){
+            messageText.innerText= 'Player O Wins!'
+            return true
+        }
 }
 
+const playSpot = (event) => {
+    const playedSpot = event.target.getAttribute('id')
+    const currentPlayer = isPlayerOne ? 'X' : 'O'
+    if (isGameOver) return
+    isPlayerOne = !isPlayerOne
+    event.target.innerText = currentPlayer
+    playedBoard[playedSpot] = currentPlayer
+    console.log(playedBoard)
+    isGameOver = checkWin()
+}
 
-function checkWin () {
-
-    for(let i = 0; i < winCombos.length; i++){
-
-        const condition = winCombos[i]
-        const a = tracker[condition[0]]
-        const b = tracker[condition[1]]
-        const c = tracker[condition[2]]
-
-        if((a == '') || (b == '') || (c == '')){
-        } else if ((a.innerText == 'X') && (b.innerText == 'X') && (c.innerText == 'X')){
-            document.getElementById('winner-text').classList.add('You Won!')
-        } else if ((a.innerText == 'O') && (b.innerText == 'O') && (c.innerText == 'O')){
-            document.getElementById('winner-text').classList.add('Computer Won!')
-        }
-    }
-    
+const restart = () => {
+    playedBoard = ['', '', '', '', '', '', '', '', '']
+    isPlayerOne = true
+    isGameOver = false
+    moveCount = 0
+    messageText.innerText = ''
+    gridArray.forEach((square) => {
+		square.innerText = ''
+	})
+	startGame()
 }
 
 restartBtn.addEventListener('click', restart)
-function restart () {
-    window.location.reload();
-}
 
 startGame()
-checkWin()
-
-
-// function check(spot1, spot2, spot3){
-//     console.log(gridSquares[0].innerText)
-//     if (
-//         (gridSquares[spot1].innerHTML == 'X') &
-//         (gridSquares[spot2].innerHTML == 'X') &
-//         (gridSquares[spot3].innerHTML == 'X') 
-//     ){
-//         return true
-//     } else
-//         return false
-// }
-
-// function winCheck () {
-
-//     if (check(0, 1, 2)){
-//         return true
-//     } else if(check(3, 4, 5)){
-//         return true
-//     } else if (check(6, 7, 8)){
-//         return true
-//     } else if (check(0,3, 6,)){
-//         return true
-//     } else if (check(1, 4, 7)){
-//         return true
-//     } else if (check(2, 5, 8)){
-//         return true
-//     } else if (check (0, 4, 8)){
-//         return true
-//     } else if (check(2, 4, 6)){
-//         return true
-//     } else {
-//         return false
-//     }
-// }
-// check()
-// winCheck()
